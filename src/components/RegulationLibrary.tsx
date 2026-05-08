@@ -105,46 +105,50 @@ export default function RegulationLibrary() {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-slate-50">
+    <div className="flex flex-col h-full bg-[#f8fafc]">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 p-8">
-        <div className="flex items-center justify-between gap-4 mb-8">
+      <header className="bg-slate-900 border-b border-white/5 p-10 relative overflow-hidden shrink-0">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="flex items-center justify-between gap-4 mb-10 relative z-10">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-800">Arsip Regulasi Nasional</h2>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1">Sumber: Database Terintegrasi (Simulasi Peraturan.go.id)</p>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-1.5 h-6 bg-gold-500 rounded-full" />
+              <h2 className="text-3xl font-black tracking-tighter text-white uppercase">Sistem Informasi Regulasi</h2>
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Direktorat Intelijen Hukum Nasional • Basis Data Terverifikasi</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-5">
              <div className="text-right hidden md:block">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Database</p>
-                <p className="text-xl font-bold text-slate-900">{SAMPLE_REGULATIONS.length} Artikel</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Entri Aktif</p>
+                <p className="text-2xl font-black text-white font-mono tracking-tighter">{SAMPLE_REGULATIONS.length.toLocaleString()}</p>
              </div>
-             <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100">
-                <BookOpen className="w-5 h-5 text-indigo-600" />
+             <div className="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl ring-1 ring-white/5">
+                <BookOpen className="w-7 h-7 text-gold-500" />
              </div>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col xl:flex-row gap-6 relative z-10">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
             <input 
               type="text" 
-              placeholder="Cari UU, Subjek, atau Kata Kunci..."
+              placeholder="Cari UU, Subjek, atau Kluster Peraturan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 transition-all"
+              className="w-full bg-slate-800 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-sm font-bold text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all shadow-inner"
             />
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-2 xl:pb-0 scrollbar-hide">
             {types.map((type) => (
                <button
                  key={type.val}
                  onClick={() => setActiveType(type.val)}
                  className={cn(
-                   "whitespace-nowrap px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border",
+                   "whitespace-nowrap px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all border",
                    activeType === type.val 
-                    ? "bg-slate-900 border-slate-900 text-white shadow-lg shadow-slate-900/10" 
-                    : "bg-white border-slate-200 text-slate-400 hover:border-slate-300"
+                    ? "bg-gold-500 border-gold-400 text-slate-900 shadow-[0_0_20px_rgba(245,158,11,0.2)]" 
+                    : "bg-slate-800 border-white/5 text-slate-500 hover:text-slate-300 hover:border-white/10"
                  )}
                >
                  {type.label} ({categoryCounts[type.val] || 0})
@@ -175,44 +179,47 @@ export default function RegulationLibrary() {
                   <motion.div layoutId="active-pill" className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600" />
                 )}
                 
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-6">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-3 mb-3">
                        <span className={cn(
-                         "px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest",
-                         reg.type === 'UU' ? "bg-red-50 text-red-600 border border-red-100" :
-                         reg.type === 'PP' ? "bg-blue-50 text-blue-600 border border-blue-100" :
-                         "bg-slate-50 text-slate-600 border border-slate-200"
+                         "px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm border",
+                         reg.type === 'UU' ? "bg-slate-900 text-gold-500 border-white/5" :
+                         reg.type === 'PP' ? "bg-blue-900 text-white border-blue-800" :
+                         "bg-white text-slate-600 border-slate-200"
                        )}>
-                         {reg.type}
+                         {reg.type} Dossier
                        </span>
-                       <span className="text-[10px] font-bold text-slate-400">• {reg.year}</span>
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest tracking-tighter">Issue Year {reg.year}</span>
                        <span className={cn(
-                         "ml-auto text-[7px] font-black px-1.5 py-0.5 rounded-full border",
-                         reg.status === 'AKTIF' ? "bg-green-50 text-green-600 border-green-100" :
+                         "ml-auto text-[8px] font-black px-3 py-1 rounded-full border shadow-sm uppercase tracking-[0.1em]",
+                         reg.status === 'AKTIF' ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
                          reg.status === 'DIUBAH' ? "bg-amber-50 text-amber-600 border-amber-100" :
                          "bg-red-50 text-red-600 border-red-100"
                        )}>
                          {reg.status}
                        </span>
                     </div>
-                    <h3 className="text-sm font-black text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{reg.title}</h3>
-                    <p className="text-xs font-semibold text-slate-500 leading-snug">{reg.subject}</p>
+                    <h3 className="text-base font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors uppercase tracking-tight leading-tight">{reg.title}</h3>
+                    <p className="text-sm font-bold text-slate-500 leading-snug tracking-tight">{reg.subject}</p>
                     
                     {reg.hierarchy && (
-                      <p className="mt-2 text-[9px] font-bold text-indigo-400 uppercase tracking-tighter flex items-center gap-1">
-                        <Filter className="w-2.5 h-2.5" /> {reg.hierarchy}
-                      </p>
+                      <div className="mt-4 flex items-center gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-100 ring-4 ring-slate-50/50">
+                        <div className="w-1.5 h-1.5 rounded-full bg-gold-500 shadow-[0_0_8px_gold]" />
+                        <p className="text-[10px] font-bold text-slate-600 uppercase tracking-tighter">
+                          {reg.hierarchy}
+                        </p>
+                      </div>
                     )}
                     
-                    <div className="flex flex-wrap gap-1.5 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-4">
                        {reg.tags.map(tag => (
-                         <span key={tag} className="text-[8px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded uppercase tracking-tighter">#{tag}</span>
+                         <span key={tag} className="text-[9px] font-black text-slate-400 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded uppercase tracking-widest hover:text-slate-600 transition-colors">#{tag}</span>
                        ))}
                     </div>
                   </div>
-                  <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-indigo-50 transition-colors">
-                     <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-slate-900 group-hover:shadow-2xl transition-all duration-300">
+                     <ChevronRight className={cn("w-5 h-5 transition-all", selectedReg?.id === reg.id ? "text-gold-500 scale-125" : "text-slate-300 group-hover:text-gold-500 group-hover:translate-x-1")} />
                   </div>
                 </div>
               </motion.div>
@@ -242,7 +249,12 @@ export default function RegulationLibrary() {
                       <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shadow-lg">
                         <FileText className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{selectedReg.type} Explorer</span>
+                      <button 
+                         onClick={() => setActiveType(selectedReg.type)}
+                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-gold-500 transition-colors cursor-pointer"
+                       >
+                         {selectedReg.type} Explorer
+                       </button>
                    </div>
                    <h2 className="text-xl font-black text-slate-900 leading-tight uppercase tracking-tighter">{selectedReg.title}</h2>
                 </div>
@@ -300,9 +312,13 @@ export default function RegulationLibrary() {
                       </h4>
                       <div className="flex flex-wrap gap-2">
                          {selectedReg.tags.map(tag => (
-                           <div key={tag} className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold text-slate-500 uppercase">
+                           <button 
+                             key={tag} 
+                             onClick={() => setSearch(tag)}
+                             className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold text-slate-500 uppercase hover:border-gold-500 hover:text-gold-600 hover:bg-gold-50/50 transition-all cursor-pointer text-left"
+                           >
                               {tag}
-                           </div>
+                           </button>
                          ))}
                       </div>
                    </section>

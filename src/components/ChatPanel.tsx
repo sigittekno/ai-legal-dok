@@ -187,35 +187,41 @@ export default function ChatPanel({ doc }: ChatPanelProps) {
   };
 
   return (
-    <div className="h-full flex flex-col relative bg-white">
+    <div className="h-full flex flex-col relative bg-[#fcfdfe]">
       {/* View Toggle */}
-      <div className="flex border-b border-slate-200 shrink-0">
+      <div className="flex bg-slate-900 border-b border-white/5 shrink-0 p-1">
         <button 
           onClick={() => setView('analysis')}
           className={cn(
-            "flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all border-b-2",
-            view === 'analysis' ? "text-blue-600 border-blue-600" : "text-slate-400 border-transparent hover:text-slate-600"
+            "flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all rounded-lg",
+            view === 'analysis' 
+              ? "bg-slate-800 text-gold-500 shadow-executive ring-1 ring-white/10" 
+              : "text-slate-500 hover:text-slate-300"
           )}
         >
-          Analisis
+          Intelijen
         </button>
         <button 
           onClick={() => setView('memo')}
           className={cn(
-            "flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all border-b-2",
-            view === 'memo' ? "text-blue-600 border-blue-600" : "text-slate-400 border-transparent hover:text-slate-600"
+            "flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all rounded-lg",
+            view === 'memo' 
+              ? "bg-slate-800 text-gold-500 shadow-executive ring-1 ring-white/10" 
+              : "text-slate-500 hover:text-slate-300"
           )}
         >
-          Legal Memo
+          Draft Memo
         </button>
         <button 
           onClick={() => setView('chat')}
           className={cn(
-            "flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all border-b-2",
-            view === 'chat' ? "text-blue-600 border-blue-600" : "text-slate-400 border-transparent hover:text-slate-600"
+            "flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all rounded-lg",
+            view === 'chat' 
+              ? "bg-slate-800 text-gold-500 shadow-executive ring-1 ring-white/10" 
+              : "text-slate-500 hover:text-slate-300"
           )}
         >
-          Tanya Jawab
+          Konsultasi
         </button>
       </div>
 
@@ -276,63 +282,63 @@ export default function ChatPanel({ doc }: ChatPanelProps) {
                 </div>
               ) : analysis ? (
                 <>
-                  <section className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Ringkasan Eksekutif</h4>
+                  <section className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Ringkasan Eksekutif</h4>
                       <button 
                         onClick={() => handlePlayVoice(analysis.summary)}
                         className={cn(
-                          "flex items-center gap-2 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest transition-all",
+                          "flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all border",
                           isPlaying 
-                            ? "bg-red-50 text-red-600 border border-red-100 animate-pulse" 
-                            : "bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100"
+                            ? "bg-red-50 text-red-600 border-red-100 animate-pulse" 
+                            : "bg-blue-900 text-white border-blue-800 hover:bg-slate-800 shadow-lg"
                         )}
                       >
                         {isPlaying ? (
                           <><Square className="w-2.5 h-2.5 fill-current" /> Berhenti</>
                         ) : (
-                          <><Volume2 className="w-2.5 h-2.5" /> Baca Suara</>
+                          <><Volume2 className="w-3 h-3" /> Bacakan</>
                         )}
                       </button>
                     </div>
-                    <p className="text-sm leading-relaxed text-slate-700 font-normal">
+                    <p className="text-sm leading-relaxed text-slate-800 font-medium">
                       {analysis.summary}
                     </p>
                   </section>
 
                   {analysis.articleMatrix && analysis.articleMatrix.length > 0 && (
                     <section className="space-y-4">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Matriks Analisis Pasal</h4>
-                      <div className="overflow-hidden border border-slate-200 rounded-2xl bg-white shadow-sm overflow-x-auto scrollbar-hide">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Matriks Analisis Pasal Utama</h4>
+                      <div className="overflow-hidden border border-slate-200 rounded-3xl bg-white shadow-executive overflow-x-auto scrollbar-hide">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-50 border-b border-slate-200">
-                              <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">Pasal</th>
-                              <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 min-w-[150px]">Isi Ringkas</th>
-                              <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 min-w-[200px]">Interpretasi AI</th>
-                              <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500">Impak</th>
+                            <tr className="bg-slate-900 border-b border-slate-800">
+                              <th className="px-5 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 whitespace-nowrap">Pasal</th>
+                              <th className="px-5 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 min-w-[150px]">Teks</th>
+                              <th className="px-5 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 min-w-[200px]">Interpretasi AI</th>
+                              <th className="px-5 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Impak</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100">
                             {analysis.articleMatrix.map((item, idx) => (
-                              <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                <td className="px-4 py-4 align-top">
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100">
+                              <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                                <td className="px-5 py-5 align-top">
+                                  <span className="inline-flex items-center px-3 py-1 rounded-lg bg-slate-900 text-gold-500 text-[10px] font-black border border-white/5 shadow-md">
                                     {item.article}
                                   </span>
                                 </td>
-                                <td className="px-4 py-4 align-top text-xs font-semibold text-slate-700">
+                                <td className="px-5 py-5 align-top text-xs font-black text-slate-900 tracking-tighter uppercase leading-tight">
                                   {item.content}
                                 </td>
-                                <td className="px-4 py-4 align-top text-xs text-slate-500 italic leading-relaxed">
+                                <td className="px-5 py-5 align-top text-[11px] text-slate-500- font-medium leading-relaxed italic">
                                   {item.interpretation}
                                 </td>
-                                <td className="px-4 py-4 align-top">
+                                <td className="px-5 py-5 align-top">
                                   <span className={cn(
-                                    "px-2 py-0.5 rounded-full text-[9px] font-black border",
+                                    "px-3 py-1 rounded-full text-[9px] font-black border uppercase tracking-widest",
                                     item.impact === 'HIGH' ? "bg-red-50 text-red-600 border-red-100" :
-                                    item.impact === 'MEDIUM' ? "bg-orange-50 text-orange-600 border-orange-100" :
-                                    "bg-blue-50 text-blue-600 border-blue-100"
+                                    item.impact === 'MEDIUM' ? "bg-amber-50 text-amber-600 border-amber-100" :
+                                    "bg-emerald-50 text-emerald-600 border-emerald-100"
                                   )}>
                                     {item.impact}
                                   </span>
@@ -353,33 +359,33 @@ export default function ChatPanel({ doc }: ChatPanelProps) {
                   </section>
 
                   <section className="space-y-4">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Klausul & Kewajiban Hukum</h4>
-                    <div className="space-y-3">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Klausul & Kewajiban Strategis</h4>
+                    <div className="space-y-4">
                       {analysis.keyClauses.map((clause, i) => (
-                        <div key={i} className="flex flex-col p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-200 transition-colors shadow-sm">
-                          <div className="flex items-start gap-4 mb-3">
-                            <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded flex items-center justify-center shrink-0 text-[10px] font-bold">
+                        <div key={i} className="flex flex-col p-6 bg-white rounded-[1.5rem] border border-slate-200 hover:border-blue-500 hover:shadow-xl transition-all shadow-executive">
+                          <div className="flex items-start gap-5 mb-4">
+                            <div className="w-10 h-10 bg-slate-100 text-slate-900 rounded-xl flex items-center justify-center shrink-0 text-sm font-black border border-slate-200">
                               {i + 1}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h5 className="text-[11px] font-bold text-slate-900 mb-1 truncate">{clause.title}</h5>
-                              <p className="text-[10px] leading-relaxed text-slate-500 line-clamp-3 mb-2">{clause.text}</p>
+                              <h5 className="text-xs font-black text-slate-900 mb-1.5 uppercase tracking-tighter">{clause.title}</h5>
+                              <p className="text-[11px] leading-relaxed text-slate-500 font-medium line-clamp-3 mb-3">{clause.text}</p>
                               <div className="flex items-center gap-2">
                                 <span className={cn(
-                                  "text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded border",
+                                  "text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border",
                                   clause.importance === 'High' ? "bg-red-50 border-red-100 text-red-600" :
                                   clause.importance === 'Medium' ? "bg-amber-50 border-amber-100 text-amber-600" :
-                                  "bg-green-50 border-green-100 text-green-600"
+                                  "bg-emerald-50 border-emerald-100 text-emerald-600"
                                 )}>
-                                    Risiko {clause.importance}
+                                    Security Tier: {clause.importance}
                                 </span>
                               </div>
                             </div>
                           </div>
                           {clause.obligation && (
-                            <div className="mt-2 pt-2 border-t border-slate-100">
-                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Kewajiban:</p>
-                                <p className="text-[10px] text-slate-600 leading-relaxed italic">{clause.obligation}</p>
+                            <div className="mt-2 pt-4 border-t border-slate-100">
+                                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Mandatory Requirement:</p>
+                                <p className="text-[11px] text-slate-800 leading-relaxed font-bold italic">{clause.obligation}</p>
                             </div>
                           )}
                         </div>

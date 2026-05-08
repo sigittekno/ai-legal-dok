@@ -142,10 +142,10 @@ export default function DocumentManager({ user, onDocSelected, compact }: Docume
         <button 
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-blue-700 disabled:opacity-50 transition-all shadow-md active:scale-95"
+          className="flex items-center gap-3 bg-slate-900 border border-white/10 text-gold-500 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-800 disabled:opacity-50 transition-all shadow-executive active:scale-95"
         >
-          {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3 h-3" />}
-          Unggah Dokumen
+          {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+          Sistem Ingesti Dokumen
         </button>
       </div>
     );
@@ -164,26 +164,33 @@ export default function DocumentManager({ user, onDocSelected, compact }: Docume
       <div 
         onClick={() => fileInputRef.current?.click()}
         className={cn(
-          "w-full max-w-lg p-14 border border-slate-200 border-dashed rounded-3xl cursor-pointer transition-all flex flex-col items-center justify-center text-center group bg-white shadow-sm",
-          uploading ? "bg-slate-50 border-transparent pointer-events-none" : "hover:bg-slate-50 hover:border-blue-200"
+          "w-full max-w-lg p-16 border-2 border-slate-200 border-dashed rounded-[3rem] cursor-pointer transition-all flex flex-col items-center justify-center text-center group bg-white shadow-executive relative overflow-hidden",
+          uploading ? "bg-slate-50 border-transparent pointer-events-none" : "hover:border-gold-500/50 hover:bg-slate-50/50"
         )}
       >
-        <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-          {uploading ? <Loader2 className="w-8 h-8 text-blue-600 animate-spin" /> : <Upload className="w-8 h-8 text-blue-400" />}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        
+        <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center mb-8 border border-white/5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl ring-4 ring-slate-100">
+          {uploading ? <Loader2 className="w-10 h-10 text-gold-500 animate-spin" /> : <Upload className="w-10 h-10 text-gold-500" />}
         </div>
         
-        <h3 className="text-xl mb-2 font-bold text-slate-800">
-          {uploading ? "Memproses Dokumen..." : "Analisis Mendalam"}
+        <h3 className="text-2xl mb-2 font-black text-slate-900 uppercase tracking-tighter">
+          {uploading ? "Mengenkripsi & Mengekstrak..." : "Terminal Ingesti Data"}
         </h3>
-        <p className="text-xs text-slate-400 mb-8 font-medium uppercase tracking-[0.2em]">
-          PDF, JPG, PNG, atau Teks (Maks 5MB)
+        <p className="text-[10px] text-slate-400 mb-10 font-black uppercase tracking-[0.3em] max-w-[240px] leading-relaxed">
+          Unggah Lembaran Negara • PDF / JPG / PNG / RAW
         </p>
 
         {!uploading && (
-           <span className="px-8 py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-600/20 group-hover:bg-blue-700 transition-all">
-             Mulai Ekstraksi Hukum
+           <span className="px-10 py-4 bg-slate-900 text-gold-500 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border border-white/10 shadow-2xl group-hover:bg-slate-800 transition-all flex items-center gap-2">
+             <FileUp className="w-3.5 h-3.5" /> Jalankan Analisis Intelijen
            </span>
         )}
+      </div>
+
+      <div className="mt-8 flex items-center gap-3 text-slate-400">
+        <Sparkles className="w-4 h-4 text-gold-500" />
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em]">Secure AI Analysis Protocol Active</p>
       </div>
 
       {error && (
