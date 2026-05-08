@@ -1,0 +1,6 @@
+{
+  "name": "LexAI Pro",
+  "description": "Platform intelijen hukum kelas enterprise dengan analisis mendalam, mesin referensi silang, dan jejak audit yang tidak dapat diubah.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["AI Document Analysis", "Legal Expert Chat", "Version Control", "Audit Trail"]
+}

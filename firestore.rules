@@ -1,0 +1,106 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 1. Primitive Definitions & Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 2. Validation Blueprints
+    function isValidUser(data) {
+      return data.uid == request.auth.uid 
+        && data.email is string 
+        && data.email.size() <= 256;
+    }
+
+    function isValidDocument(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 255
+        && data.ownerId == request.auth.uid
+        && data.content is string && data.content.size() <= 1048576 // 1MB limit
+        && data.mimeType is string
+        && (data.createdAt == request.time || data.createdAt == resource.data.createdAt);
+    }
+
+    function isValidVersion(data) {
+      return data.documentId is string
+        && data.versionNumber is number
+        && data.content is string && data.content.size() <= 1048576
+        && data.createdAt == request.time;
+    }
+
+    function isValidAuditLog(data) {
+      return data.documentId is string
+        && data.userId == request.auth.uid
+        && data.action in ['UPLOAD', 'VIEW', 'CHAT', 'COMPARE', 'DELETE', 'VERSION_RESTORE']
+        && data.timestamp == request.time;
+    }
+
+    // 3. Collection Rules
+    
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidUser(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'updatedAt', 'lastLogin']);
+    }
+
+    // Documents Collection
+    match /documents/{docId} {
+      allow get: if isSignedIn() && existing().ownerId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      
+      allow create: if isSignedIn() && isValidDocument(incoming());
+      
+      allow update: if isSignedIn() && existing().ownerId == request.auth.uid 
+        && isValidDocument(incoming())
+        && (
+          // Update Meta
+          incoming().diff(existing()).affectedKeys().hasOnly(['name', 'tags', 'updatedAt']) ||
+          // Update Content (New Version)
+          incoming().diff(existing()).affectedKeys().hasOnly(['content', 'currentVersion', 'updatedAt'])
+        )
+        && incoming().updatedAt == request.time;
+        
+      allow delete: if isSignedIn() && existing().ownerId == request.auth.uid;
+
+      // Subcollections
+      match /versions/{versionId} {
+        allow read: if isSignedIn() && get(/databases/$(database)/documents/documents/$(docId)).data.ownerId == request.auth.uid;
+        allow create: if isSignedIn() && get(/databases/$(database)/documents/documents/$(docId)).data.ownerId == request.auth.uid
+          && isValidVersion(incoming());
+      }
+      
+      match /auditLogs/{logId} {
+        allow read: if isSignedIn() && get(/databases/$(database)/documents/documents/$(docId)).data.ownerId == request.auth.uid;
+        allow create: if isSignedIn() && get(/databases/$(database)/documents/documents/$(docId)).data.ownerId == request.auth.uid
+          && isValidAuditLog(incoming());
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Document": {
+      "title": "Document",
+      "description": "Legal document metadata and current state",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "content": { "type": "string", "description": "Base64 or Text content" },
+        "mimeType": { "type": "string" },
+        "size": { "type": "number" },
+        "currentVersion": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["name", "ownerId", "content"]
+    },
+    "Version": {
+      "title": "Version",
+      "description": "Historical version of a document",
+      "type": "object",
+      "properties": {
+        "documentId": { "type": "string" },
+        "versionNumber": { "type": "number" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["documentId", "versionNumber", "content"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Record of document activity",
+      "type": "object",
+      "properties": {
+        "documentId": { "type": "string" },
+        "userId": { "type": "string" },
+        "action": { "type": "string", "enum": ["UPLOAD", "VIEW", "CHAT", "COMPARE", "DELETE", "VERSION_RESTORE"] },
+        "details": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["documentId", "userId", "action", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private user profile"
+    },
+    "/documents/{docId}": {
+      "schema": "Document",
+      "description": "Legal documents owned by users"
+    },
+    "/documents/{docId}/versions/{versionId}": {
+      "schema": "Version",
+      "description": "Version history for a document"
+    },
+    "/documents/{docId}/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Audit trail for document activities"
+    }
+  }
+}
